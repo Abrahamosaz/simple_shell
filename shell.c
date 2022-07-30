@@ -12,13 +12,13 @@ ssize_t execute(char *lineptr)
 	char *args[] = {lineptr, NULL};
 	pid_t childid;
 
-	if (_strncmp(lineptr, "exit", 4) == 0)
+	if (_strncmp(lineptr, "exit", 0) == 0)
 		return (-1);
 	childid = fork();
 	if (childid == -1)
 	{
 		perror("Error");
-		return (2);
+		return (-1);
 	}
 	if (childid == 0)
 	{
@@ -71,12 +71,10 @@ int main(int argc, char *argv[])
 	int  check = 1;
 	ssize_t input, exit_status;
 	size_t status = 0;
-	char *buffer;
-	char *mallocmemory;
+	char *buffer, *mallocmemory = NULL;
 	struct stat statbuffer;
 
 	do {
-		write(STDOUT_FILENO, "#cisfun ", 8);
 		if  (argc > 1)
 		{
 			if (stat(argv[1], &statbuffer) == 0)
@@ -88,13 +86,13 @@ int main(int argc, char *argv[])
 			}
 		} else
 		{
+			write(STDOUT_FILENO, "#cisfun ", 8);
 			input = getline(&buffer, &status, stdin);
 			mallocmemory = getstring(buffer);
 			exit_status = execute(mallocmemory);
-			if (exit_status == 2)
-				free(mallocmemory);
 		}
 	} while (exit_status != -1);
-	free(mallocmemory);
+	if (mallocmemory)
+		free(mallocmemory);
 	exit(EXIT_SUCCESS);
 }

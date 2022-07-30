@@ -11,7 +11,16 @@ int _strncmp(char *dest, char *src, size_t n)
 {
 	size_t i = 0;
 
-	for (i; i < n; i++)
+	if (n)
+	{
+		for (i; i < n; i++)
+		{
+			if (dest[i] != src[i])
+				return (dest[i] - src[i]);
+		}
+		return (0);
+	}
+	for (i; dest[i]; i++)
 	{
 		if (dest[i] != src[i])
 			return (dest[i] - src[i]);
