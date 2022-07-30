@@ -1,1 +1,1 @@
-A simple shell project
+A _simple shell project
