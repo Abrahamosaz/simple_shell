@@ -17,5 +17,6 @@
 extern char **environ;
 int execute_command(char **argv);
 char *getstring(char *string);
-ssize_t execute(char *lineptr);
+ssize_t execute(char **lineptr);
+void free_str(char **argv);
 #endif

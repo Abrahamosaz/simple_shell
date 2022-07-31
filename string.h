@@ -5,4 +5,8 @@
 
 /* function declaration */
 int _strncmp(char *dest, char *src, size_t n);
+char **strtoken(char *buffer);
+int _strlen(char *str);
+int _strword(char *str, char *delim);
+char *_strcpy(char *dest, char *src);
 #endif
