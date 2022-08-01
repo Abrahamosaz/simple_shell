@@ -9,7 +9,6 @@ ssize_t execute(char **lineptr)
 {
 	struct stat statbuffer;
 	pid_t childid;
-	char *environ[] = {(char *) "C_IS_FUN_:)", (char *) "SESSION=ubuntu", (char *) "PATH=/bin/", NULL};
 
 	if (_strncmp(lineptr[0], "exit", 0) == 0)
 		return (-1);
