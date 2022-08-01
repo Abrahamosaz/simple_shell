@@ -10,12 +10,10 @@ ssize_t execute(char **lineptr)
 	unsigned int i = 0;
 	struct stat statbuffer;
 	pid_t childid;
-	char *environ[] = {(char *) "C_IS_FUN_:)", (char *) "SESSION=ubuntu", (char *) "PATH=/usr/bin:/bin:", NULL};
+	char *environ[] = {(char *) "C_IS_FUN_:)", (char *) "SESSION=ubuntu", (char *) "PATH=/bin/", NULL};
 
 	if (_strncmp(lineptr[0], "exit", 0) == 0)
-	{
 		return (-1);
-	}
 	childid = fork();
 	if (childid == -1)
 	{
@@ -25,9 +23,8 @@ ssize_t execute(char **lineptr)
 	if (childid == 0)
 	{
 		if (stat(lineptr[0], &statbuffer) == 0)
-		{
 			execve(lineptr[0], lineptr, environ);
-		} else
+		else
 		{
 			perror("./hsh");
 			exit(-1);
@@ -61,7 +58,7 @@ int main(int argc, char *argv[])
 				exit_status = execute_command(argv);
 			else
 			{
-				perror("Error");
+				perror("./hsh");
 				exit_status = -1;
 			}
 		} else
