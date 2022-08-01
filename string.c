@@ -23,21 +23,21 @@ int _strlen(char *str)
  */
 int _strncmp(char *dest, char *src, size_t n)
 {
-	size_t i = 0;
+	size_t i, j;
 
 	if (n)
 	{
-		for (i; i < n; i++)
+		for (i = 0; i < n; i++)
 		{
 			if (dest[i] != src[i])
 				return (dest[i] - src[i]);
 		}
 		return (0);
 	}
-	for (i; dest[i]; i++)
+	for (j = 0; dest[j]; j++)
 	{
-		if (dest[i] != src[i])
-			return (dest[i] - src[i]);
+		if (dest[j] != src[j])
+			return (dest[j] - src[j]);
 	}
 	return (0);
 }
