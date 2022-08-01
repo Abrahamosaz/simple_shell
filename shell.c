@@ -10,6 +10,7 @@ ssize_t execute(char **lineptr)
 	unsigned int i = 0;
 	struct stat statbuffer;
 	pid_t childid;
+	char *environ[] = {(char *) "C_IS_FUN_:)", (char *) "SESSION=ubuntu", (char *) "PATH=/usr/bin:/bin:", NULL};
 
 	if (_strncmp(lineptr[0], "exit", 0) == 0)
 	{
@@ -28,7 +29,7 @@ ssize_t execute(char **lineptr)
 			execve(lineptr[0], lineptr, environ);
 		} else
 		{
-			perror(lineptr[0]);
+			perror("./hsh");
 			exit(-1);
 		}
 	}
@@ -46,7 +47,7 @@ ssize_t execute(char **lineptr)
  */
 int main(int argc, char *argv[])
 {
-	int  check = 1;
+	int check = 1;
 	ssize_t input, exit_status;
 	size_t status = 0;
 	char *buffer = NULL;
@@ -65,7 +66,7 @@ int main(int argc, char *argv[])
 			}
 		} else
 		{
-			write(STDOUT_FILENO, "#cisfun ", 8);
+			write(STDOUT_FILENO, "#cisfun$ ", 9);
 			input = getline(&buffer, &status, stdin);
 			if (input == -1)
 			{
