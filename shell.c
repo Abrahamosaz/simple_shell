@@ -7,14 +7,11 @@
  */
 ssize_t execute(char **lineptr)
 {
-	unsigned int i = 0;
 	struct stat statbuffer;
 	pid_t childid;
 
 	if (_strncmp(lineptr[0], "exit", 0) == 0)
-	{
 		return (-1);
-	}
 	childid = fork();
 	if (childid == -1)
 	{
@@ -24,11 +21,10 @@ ssize_t execute(char **lineptr)
 	if (childid == 0)
 	{
 		if (stat(lineptr[0], &statbuffer) == 0)
-		{
 			execve(lineptr[0], lineptr, environ);
-		} else
+		else
 		{
-			perror(lineptr[0]);
+			perror("./hsh");
 			exit(-1);
 		}
 	}
@@ -46,7 +42,6 @@ ssize_t execute(char **lineptr)
  */
 int main(int argc, char *argv[])
 {
-	int  check = 1;
 	ssize_t input, exit_status;
 	size_t status = 0;
 	char *buffer = NULL;
@@ -60,12 +55,12 @@ int main(int argc, char *argv[])
 				exit_status = execute_command(argv);
 			else
 			{
-				perror("Error");
+				perror("./hsh");
 				exit_status = -1;
 			}
 		} else
 		{
-			write(STDOUT_FILENO, "#cisfun ", 8);
+			write(STDOUT_FILENO, "#cisfun$ ", 9);
 			input = getline(&buffer, &status, stdin);
 			if (input == -1)
 			{
