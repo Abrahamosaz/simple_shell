@@ -1,8 +1,9 @@
 #include "shell.h"
 /**
- * free_str - frees allocated memory of all string literals in argv
- * @argv: array of pointers
- * Return: void
+ * free_str - free malloc memory allocated
+ * @argv: argument stored on the heep by malloc
+ *
+ * Return: return void
  */
 void free_str(char **argv)
 {

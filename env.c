@@ -1,7 +1,9 @@
 #include "shell.h"
 /**
+ * _getenv - get the value of the enviroment path variable
+ * @env: key of the enviroment varaible
  *
- *
+ * Return: return pointer
  */
 char *_getenv(const char *env)
 {
@@ -23,8 +25,11 @@ char *_getenv(const char *env)
 	return (NULL);
 }
 /**
+ * add_node_end - add a node to the end of the linked list
+ * @head: head pointer of the linked list
+ * @environ: value to be strored
  *
- *
+ * Return: return a struct pointer
  */
 struct path_env *add_node_end(struct path_env **head, char *environ)
 {
@@ -38,7 +43,7 @@ struct path_env *add_node_end(struct path_env **head, char *environ)
 		free(new_node);
 		return (NULL);
 	}
-	_strcpy(new_node->string, environ);
+	new_node->string = environ;
 	new_node->len = _strlen(environ);
 	new_node->next = NULL;
 	if (!*head)
@@ -52,27 +57,38 @@ struct path_env *add_node_end(struct path_env **head, char *environ)
 	return (*head);
 }
 /**
+ * set_path - set the path of the command enter by the user
  *
- *
+ * Return: return struct pointer
  */
-struct path_env *set_path(struct path_env **head)
+struct path_env *set_path()
 {
-	size_t i = 0;
-	char *path;
-	char *token, *delim =":";
+	char *path, *find;
+	char *token, *delim = ":";
+	struct path_env *path_var = NULL, *head = NULL;
 
-	path = _getenv("PATH");
+	path = malloc(sizeof(char) * _strlen(_getenv("PATH")));
+	if (!path)
+	{
+		free(path);
+		return (NULL);
+	}
+	find = _getenv("PATH");
+	_strcpy(path, find);
 	token = strtok(path, delim);
 	while (token)
 	{
-		add_node_end(head, token);
+		head = add_node_end(&path_var, token);
 		token = strtok(NULL, delim);
 	}
-	return (*head);
+	free(path);
+	return (head);
 }
 /**
+ * check_file - check a file if it exist
+ * @filepath: the filepath to the file
  *
- *
+ * Return: return 0 if found and 1 otherwise
  */
 ssize_t check_file(char *filepath)
 {
