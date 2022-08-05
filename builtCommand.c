@@ -1,4 +1,6 @@
 #include "shell.h"
+#define ERROR_MESSAGE                                      \
+	write(STDERR_FILENO, "couldn't set varaible\n", 23)
 /**
  * built_commands - for commands executed on the shell
  * @argv: arguments passed by the user
@@ -58,10 +60,20 @@ ssize_t env_shell(void)
  */
 ssize_t setenv_shell(char **args)
 {
-	size_t i = 0, check = 0;
-	int len1, len2, total_len, x, j;
-	char *name = args[1], *value = args[2], *buffer, *store;
+	size_t i = 0, check = 0, total_len, x, j, h = 0;
+	char *name = args[1], *value = args[2], *buffer = NULL, *store = NULL;
 
+	if (!name || !value)
+	{
+		ERROR_MESSAGE;
+		return (1);
+	}
+	buffer = malloc(sizeof(char) * _strlen(name) + _strlen(value) + 1);
+	if (buffer == NULL)
+	{
+		free(buffer);
+		return (1);
+	}
 	while (environ[i])
 	{
 		if (_strncmp(environ[i], name, _strlen(name)) == 0)
@@ -77,24 +89,16 @@ ssize_t setenv_shell(char **args)
 		_setenv(args, &check, store);
 		return (1);
 	}
-	len1 = _strlen(name);
-	len2 = _strlen(value);
-	total_len = len1 + len2;
-	buffer = malloc(sizeof(char) * total_len + 1);
-	if (buffer == NULL)
-		return (-1);
-	for (j = 0; j < len1; j++)
+	for (j = 0; j < _strlen(name); j++)
 		buffer[j] = name[j];
 	buffer[j] = '=';
-	for (x = 0, j += 1; x < len2; x++, j++)
+	for (x = 0, j += 1; x < _strlen(value); x++, j++)
 		buffer[j] = value[x];
 	buffer[j] = '\0';
-	i = 0;
-	while (environ[i])
-		i++;
-	x = 0;
-	environ[i] = buffer;
-	environ[i + 1] = NULL;
+	while (environ[h])
+		h++;
+	environ[h] = buffer;
+	environ[h + 1] = NULL;
 	return (1);
 }
 /**
