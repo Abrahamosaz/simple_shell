@@ -7,11 +7,43 @@
  */
 ssize_t execute(char **lineptr)
 {
-	struct stat statbuffer;
+	unsigned int i = 0;
+	ssize_t exit_status;
+	char *new_path_env = NULL;
 	pid_t childid;
 
-	if (_strncmp(lineptr[0], "exit", 0) == 0)
+	exit_status = built_commands(lineptr);
+	if (exit_status == -1)
+		return (exit_status);
+	new_path_env = search_path(lineptr);
+	if (!new_path_env)
+		return (1);
+	if (_strncmp(new_path_env, "find", 4) == 0)
+	{
+		exit_status = _execve_path(lineptr);
+		return (exit_status);
+	}
+	childid = fork();
+	if (childid == -1)
+	{
+		perror("Error");
 		return (-1);
+	}
+	if (childid == 0)
+		execve(new_path_env, lineptr, environ);
+	waitpid(childid, NULL, 0);
+	return (1);
+}
+/**
+ * _execve_path - execute command when path is passed by the user
+ * @args: arguments pased by the user
+ *
+ * Return: return integer value
+ */
+ssize_t  _execve_path(char **args)
+{
+	pid_t childid;
+
 	childid = fork();
 	if (childid == -1)
 	{
@@ -20,11 +52,9 @@ ssize_t execute(char **lineptr)
 	}
 	if (childid == 0)
 	{
-		if (stat(lineptr[0], &statbuffer) == 0)
-			execve(lineptr[0], lineptr, environ);
-		else
+		if (execve(args[0], args, environ) == -1)
 		{
-			perror("./hsh");
+			perror(args[0]);
 			exit(-1);
 		}
 	}
@@ -44,28 +74,27 @@ int main(int argc, char *argv[])
 {
 	ssize_t input, exit_status;
 	size_t status = 0;
-	char *buffer = NULL;
-	char **tokens = NULL;
-	struct stat statbuffer;
+	char *buffer = NULL, **tokens = NULL;
+	struct stat statinfo;
 
 	do {
 		if  (argc > 1)
 		{
-			if (stat(argv[1], &statbuffer) == 0)
+			if (stat(argv[1], &statinfo) == 0)
 				exit_status = execute_command(argv);
 			else
 			{
-				perror("./hsh");
+				perror("Error");
 				exit_status = -1;
 			}
 		} else
 		{
-			write(STDOUT_FILENO, "#cisfun$ ", 9);
-			input = getline(&buffer, &status, stdin);
+			write(STDOUT_FILENO, "#cisfun ", 8);
+			input = getline(&buffer, &input, stdin);
 			if (input == -1)
 			{
 				free(buffer);
-				return (0);
+				exit(EXIT_SUCCESS);
 			}
 			tokens = strtoken(buffer);
 			exit_status = execute(tokens);
