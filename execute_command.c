@@ -24,14 +24,14 @@ int execute_command(char **argv)
 	childid = fork();
 	if (childid == -1)
 	{
-		perror("Error");
+		perror(argv[0]);
 		return (-1);
 	}
 	if (childid == 0)
 	{
 		if (execve(buffer[0], buffer, environ) == -1)
 		{
-			perror("Error");
+			perror(argv[0]);
 			exit(-1);
 		}
 	}

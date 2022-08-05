@@ -2,10 +2,11 @@
 /**
  * execute - execute the command given to the shell
  * @lineptr: command string
+ * @argv: command line arguments
  *
  * Return: return 0 on success and -1 otherwise
  */
-ssize_t execute(char **lineptr)
+ssize_t execute(char **lineptr, char **argv)
 {
 	unsigned int i = 0;
 	ssize_t exit_status;
@@ -13,20 +14,20 @@ ssize_t execute(char **lineptr)
 	pid_t childid;
 
 	exit_status = built_commands(lineptr);
-	if (exit_status == -1)
+	if (exit_status != 0)
 		return (exit_status);
-	new_path_env = search_path(lineptr);
+	new_path_env = search_path(lineptr, argv[0]);
 	if (!new_path_env)
 		return (1);
 	if (_strncmp(new_path_env, "find", 4) == 0)
 	{
-		exit_status = _execve_path(lineptr);
+		exit_status = _execve_path(lineptr, argv[0]);
 		return (exit_status);
 	}
 	childid = fork();
 	if (childid == -1)
 	{
-		perror("Error");
+		perror(argv[0]);
 		return (-1);
 	}
 	if (childid == 0)
@@ -37,24 +38,25 @@ ssize_t execute(char **lineptr)
 /**
  * _execve_path - execute command when path is passed by the user
  * @args: arguments pased by the user
+ * @argv: first command line argument
  *
  * Return: return integer value
  */
-ssize_t  _execve_path(char **args)
+ssize_t  _execve_path(char **args, char *argv)
 {
 	pid_t childid;
 
 	childid = fork();
 	if (childid == -1)
 	{
-		perror("Error");
+		perror(argv);
 		return (-1);
 	}
 	if (childid == 0)
 	{
 		if (execve(args[0], args, environ) == -1)
 		{
-			perror(args[0]);
+			perror(argv);
 			exit(-1);
 		}
 	}
@@ -73,23 +75,21 @@ ssize_t  _execve_path(char **args)
 int main(int argc, char *argv[])
 {
 	ssize_t input, exit_status;
-	size_t status = 0;
 	char *buffer = NULL, **tokens = NULL;
-	struct stat statinfo;
 
 	do {
 		if  (argc > 1)
 		{
-			if (stat(argv[1], &statinfo) == 0)
+			if (check_file(argv[1]) == 0)
 				exit_status = execute_command(argv);
 			else
 			{
-				perror("Error");
+				perror(argv[0]);
 				exit_status = -1;
 			}
 		} else
 		{
-			write(STDOUT_FILENO, "#cisfun ", 8);
+			write(STDOUT_FILENO, "#cisfun$ ", 9);
 			input = getline(&buffer, &input, stdin);
 			if (input == -1)
 			{
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 				exit(EXIT_SUCCESS);
 			}
 			tokens = strtoken(buffer);
-			exit_status = execute(tokens);
+			exit_status = execute(tokens, argv);
 			free_str(tokens);
 			free(buffer);
 			tokens = NULL;

@@ -21,3 +21,18 @@ char *_strcat(char *dest, char *src)
 	dest[i] = '\0';
 	return (dest);
 }
+/**
+ *
+ *
+ */
+void print_str(char *args)
+{
+	size_t i = 0;
+
+	while (args[i])
+	{
+		write(STDOUT_FILENO, &args[i], 1);
+		i++;
+	}
+	write(STDOUT_FILENO, "\n", 2);
+}

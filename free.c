@@ -17,3 +17,20 @@ void free_str(char **argv)
 	}
 	free(argv);
 }
+/**
+ * free_list - free linked list
+ * @head: head pointer of the linked list
+ *
+ * Return: return void
+ */
+void free_list(struct path_env *head)
+{
+	struct path_env *dir = head;
+
+	while (dir)
+	{
+		dir = dir->next;
+		free(head);
+		head = dir;
+	}
+}

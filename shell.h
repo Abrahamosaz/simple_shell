@@ -44,7 +44,7 @@ typedef struct built_in
 extern char **environ;
 int execute_command(char **argv);
 char *getstring(char *string);
-ssize_t execute(char **lineptr);
+ssize_t execute(char **lineptr, char **argv);
 void free_str(char **argv);
 char *_getenv(const char *env);
 ssize_t built_commands(char **argv);
@@ -52,6 +52,11 @@ ssize_t exit_shell(char **args);
 ssize_t check_file(char *filepath);
 struct path_env *add_node_end(struct path_env **head, char *environ);
 struct path_env *set_path();
-ssize_t _execve_path(char **args);
-char *search_path(char **args);
+ssize_t _execve_path(char **args, char *);
+char *search_path(char **args, char *argv);
+void free_list(struct path_env *head);
+ssize_t env_shell();
+/* set enviroment varaible */
+ssize_t setenv_shell(char **args);
+void _setenv(char **args, ssize_t *n, char *address);
 #endif

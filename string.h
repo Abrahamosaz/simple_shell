@@ -10,4 +10,5 @@ int _strlen(char *str);
 int _strword(char *str, char *delim);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
+void print_str(char *args);
 #endif

@@ -2,10 +2,11 @@
 /**
  * search_path - search for a particuler path that matches the command
  * @args: argument enter by the user
+ * @argv: first argument of the shell
  *
  * Return: return pointer
  */
-char *search_path(char **args)
+char *search_path(char **args, char *argv)
 {
 	struct path_env *trans;
 	char slash[1] = "/", *path = NULL, *new_path = NULL;
@@ -24,9 +25,14 @@ char *search_path(char **args)
 		_strcat(path, slash);
 		_strcat(path, args[0]);
 		if (check_file(path) == 0)
+		{
+			free_list(trans);
 			return (path);
+		}
+		path = NULL;
 		trans = trans->next;
 	}
-	perror(args[0]);
+	free_list(trans);
+	perror(argv);
 	return (NULL);
 }
