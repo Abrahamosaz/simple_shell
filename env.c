@@ -87,7 +87,6 @@ struct path_env *set_path()
 /**
  * check_file - check a file if it exist
  * @filepath: the filepath to the file
- *
  * Return: return 0 if found and 1 otherwise
  */
 ssize_t check_file(char *filepath)

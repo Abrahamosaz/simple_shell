@@ -98,7 +98,6 @@ int _strword(char *str, char *delim)
  * _strcpy - copy the string from src to dest
  * @dest: destination
  * @src: source of string
- *
  * Return: return a pointer to dest string
  */
 char *_strcpy(char *dest, char *src)
