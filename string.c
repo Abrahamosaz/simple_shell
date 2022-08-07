@@ -5,7 +5,7 @@
  *
  * Return: return the length count
  */
-int _strlen(char *str)
+size_t  _strlen(char *str)
 {
 	size_t i = 0;
 
@@ -23,18 +23,18 @@ int _strlen(char *str)
  */
 int _strncmp(char *dest, char *src, size_t n)
 {
-	size_t i = 0;
+	size_t i;
 
 	if (n)
 	{
-		for (i; i < n; i++)
+		for (i = 0; i < n; i++)
 		{
 			if (dest[i] != src[i])
 				return (dest[i] - src[i]);
 		}
 		return (0);
 	}
-	for (i; dest[i] || src[i]; i++)
+	for (i = 0; dest[i] || src[i]; i++)
 	{
 		if (dest[i] != src[i])
 			return (dest[i] - src[i]);

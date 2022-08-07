@@ -8,12 +8,11 @@
  */
 ssize_t execute(char **lineptr, char **argv)
 {
-	unsigned int i = 0;
 	ssize_t exit_status;
 	char *new_path_env = NULL;
 	pid_t childid;
 
-	exit_status = built_commands(lineptr);
+	exit_status = built_commands(lineptr, argv[0]);
 	if (exit_status != 0)
 		return (exit_status);
 	new_path_env = search_path(lineptr, argv[0]);
@@ -74,7 +73,8 @@ ssize_t  _execve_path(char **args, char *argv)
  */
 int main(int argc, char *argv[])
 {
-	ssize_t input, exit_status;
+	ssize_t exit_status, output;
+	size_t input;
 	char *buffer = NULL, **tokens = NULL;
 
 	do {
@@ -90,8 +90,8 @@ int main(int argc, char *argv[])
 		} else
 		{
 			write(STDOUT_FILENO, "#cisfun$ ", 9);
-			input = getline(&buffer, &input, stdin);
-			if (input == -1)
+			output = getline(&buffer, &input, stdin);
+			if (output == -1)
 			{
 				free(buffer);
 				exit(EXIT_SUCCESS);

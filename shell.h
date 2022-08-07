@@ -47,8 +47,8 @@ char *getstring(char *string);
 ssize_t execute(char **lineptr, char **argv);
 void free_str(char **argv);
 char *_getenv(const char *env);
-ssize_t built_commands(char **argv);
-ssize_t exit_shell(char **args);
+ssize_t built_commands(char **argv, char *);
+ssize_t exit_shell(char *, char *, char *, char **args, char *);
 ssize_t check_file(char *filepath);
 struct path_env *add_node_end(struct path_env **head, char *environ);
 struct path_env *set_path();
@@ -56,7 +56,9 @@ ssize_t _execve_path(char **args, char *);
 char *search_path(char **args, char *argv);
 void free_list(struct path_env *head);
 ssize_t env_shell();
+ssize_t _cd(char *, char *name, char *value);
 /* set enviroment varaible */
-ssize_t setenv_shell(char **args);
-void _setenv(char **args, ssize_t *n, char *address);
+ssize_t setenv_shell(char *, char *, char *);
+void _setenv(char *name, char *value, size_t *n, char *address);
+ssize_t unsetenv_shell(char *name);
 #endif

@@ -1,13 +1,13 @@
 #include "shell.h"
 #define ERROR_MESSAGE                                      \
-write(STDERR_FILENO, "couldn't set variable\n", 23)
+	write(STDERR_FILENO, "couldn't set varaible\n", 23)
 /**
  * built_commands - for commands executed on the shell
  * @argv: arguments passed by the user
  *
  * Return: return integer value
  */
-ssize_t built_commands(char **argv)
+ssize_t built_commands(char **argv, char *first_arg)
 {
 	size_t  i = 0;
 	ssize_t exit_status = 0;
@@ -15,6 +15,7 @@ ssize_t built_commands(char **argv)
 		{"exit", exit_shell},
 		{"env", env_shell},
 		{"setenv", setenv_shell},
+		{"unsetenv", unsetenv_shell},
 		{"cd", _cd},
 		{NULL, NULL}
 	};
@@ -22,7 +23,7 @@ ssize_t built_commands(char **argv)
 	while (var[i]._command)
 	{
 		if (_strncmp(var[i]._command, argv[0], 0) == 0)
-			exit_status = var[i].ptr(argv);
+			exit_status = var[i].ptr(argv[0], argv[1], argv[2], argv, first_arg);
 		i++;
 	}
 	return (exit_status);
@@ -33,10 +34,32 @@ ssize_t built_commands(char **argv)
  *
  * Return: return integer value
  */
-ssize_t exit_shell(char **args)
+ssize_t exit_shell(char *t, char *t1, char *t2, char **args, char *fst)
 {
-	(void)args;
-	return (-1);
+	ssize_t i = 0, status;
+
+	(void)t;
+	(void)t1;
+	(void)t2;
+	if (!args[1])
+		return (-1);
+	while (args[1][i])
+	{
+		if (_isalpha(args[1][i]) == -1)
+		{
+			write(STDERR_FILENO, fst, _strlen(fst));
+			write(STDERR_FILENO, ": ", 2);
+			write(STDERR_FILENO, args[0], _strlen(args[0]));
+			write(STDERR_FILENO, ": Illegal number: ", 19);
+			write(STDERR_FILENO, args[1], _strlen(args[1]));
+			write(STDERR_FILENO, "\n", 2);
+			return (1);
+		}
+		i++;
+	}
+	status = atoi(args[1]);
+	free_str(args);
+	exit(status);
 }
 /**
  *
@@ -45,7 +68,6 @@ ssize_t exit_shell(char **args)
 ssize_t env_shell(void)
 {
 	unsigned int i = 0;
-	char **new_environ = environ;
 
 	while (environ[i])
 	{
@@ -59,10 +81,10 @@ ssize_t env_shell(void)
  *
  *
  */
-ssize_t setenv_shell(char **args)
+ssize_t setenv_shell(__attribute__((unused))char *tk, char *name, char *value)
 {
-	size_t i = 0, check = 0, total_len, x, j, h = 0;
-	char *name = args[1], *value = args[2], *buffer = NULL, *store = NULL;
+	size_t i = 0, check = 0, x, j, h = 0;
+	char *buffer = NULL, *store = NULL;
 
 	if (!name || !value)
 	{
@@ -87,7 +109,7 @@ ssize_t setenv_shell(char **args)
 	}
 	if (check)
 	{
-		_setenv(args, &check, store);
+		_setenv(name, value, &check, store);
 		return (1);
 	}
 	for (j = 0; j < _strlen(name); j++)
@@ -106,10 +128,9 @@ ssize_t setenv_shell(char **args)
  *
  *
  */
-void _setenv(char **args, ssize_t *n, char *address)
+void _setenv(char *name, char *value, size_t *n, char *address)
 {
 	ssize_t i = 0, j = 0;
-	char *name = args[1], *value = args[2];
 	ssize_t len1 = _strlen(name), len2 = _strlen(value);
 
 	if (!n || !address)
@@ -127,59 +148,4 @@ void _setenv(char **args, ssize_t *n, char *address)
 		i++;
 	}
 	address[i] = '\0';
-}
-/**
- * _cd - changes directory
- * @tokens: array of pointers to user input
- * Return: 0
- */
-ssize_t _cd(char **tokens)
-{
-	char *current_dir, *new_dir, *slash, *home_dir, *dir, *target_dir;
-
-	if (tokens[2])
-	{
-		perror("too many arguments");
-		return (1);
-	}
-	if (tokens[1])
-	{
-		home_dir = malloc(sizeof(char) * 100);
-		dir = malloc(sizeof(char) * 1024);
-		target_dir = malloc(sizeof(char) * 1024);
-		slash = malloc(sizeof(char) * (strlen(tokens[1]) + 1));
-		current_dir = _getenv("PWD");
-
-		strcat((_strcpy(home_dir, _getenv("HOME"))), "/");
-		if ((tokens[1][0] == '-' && tokens[1][1] == '-') && !(tokens[1][2]))
-			new_dir = home_dir;
-		else if (tokens[1][0] == '-' && !(tokens[1][1]))
-			new_dir = _getenv("OLDPWD");
-		else if (tokens[1][0] == '~' && !(tokens[1][1]))
-			new_dir = home_dir;
-		else
-		{
-			_strcat(_strcpy(slash, "/"), tokens[1]);
-			_strcat((strcpy(target_dir, current_dir)), slash);
-		}
-	} else if (tokens[1] == "cd")
-		new_dir = home_dir;
-	if (new_dir == home_dir)
-		chdir(home_dir);
-	else if (new_dir == _getenv("OLDPWD"))
-	{
-		chdir(_getenv("OLDPWD"));
-		printf("%s\n", _getenv("OLDPWD"));
-	} else if (access(target_dir, F_OK) == 0)
-	{
-		chdir(target_dir);
-	} else
-		perror("Directory does not exist");
-	setenv("OLDPWD", current_dir, 1);
-	setenv("PWD", getcwd(dir, 1024), 1);
-	free(home_dir);
-	free(dir);
-	free(target_dir);
-	free(slash);
-	return (1);
 }

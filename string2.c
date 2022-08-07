@@ -36,3 +36,14 @@ void print_str(char *args)
 	}
 	write(STDOUT_FILENO, "\n", 2);
 }
+/**
+ *
+ *
+ *
+ */
+ssize_t _isalpha(char str)
+{
+	if (str >= 48 && str <= 57)
+		return (0);
+	return (-1);
+}
