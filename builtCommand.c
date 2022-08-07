@@ -1,6 +1,6 @@
 #include "shell.h"
 #define ERROR_MESSAGE                                      \
-	write(STDERR_FILENO, "couldn't set varaible\n", 23)
+write(STDERR_FILENO, "couldn't set variable\n", 23)
 /**
  * built_commands - for commands executed on the shell
  * @argv: arguments passed by the user
@@ -15,6 +15,7 @@ ssize_t built_commands(char **argv)
 		{"exit", exit_shell},
 		{"env", env_shell},
 		{"setenv", setenv_shell},
+		{"cd", _cd},
 		{NULL, NULL}
 	};
 
@@ -126,4 +127,59 @@ void _setenv(char **args, ssize_t *n, char *address)
 		i++;
 	}
 	address[i] = '\0';
+}
+/**
+ * _cd - changes directory
+ * @tokens: array of pointers to user input
+ * Return: 0
+ */
+ssize_t _cd(char **tokens)
+{
+	char *current_dir, *new_dir, *slash, *home_dir, *dir, *target_dir;
+
+	if (tokens[2])
+	{
+		perror("too many arguments");
+		return (1);
+	}
+	if (tokens[1])
+	{
+		home_dir = malloc(sizeof(char) * 100);
+		dir = malloc(sizeof(char) * 1024);
+		target_dir = malloc(sizeof(char) * 1024);
+		slash = malloc(sizeof(char) * (strlen(tokens[1]) + 1));
+		current_dir = _getenv("PWD");
+
+		strcat((_strcpy(home_dir, _getenv("HOME"))), "/");
+		if ((tokens[1][0] == '-' && tokens[1][1] == '-') && !(tokens[1][2]))
+			new_dir = home_dir;
+		else if (tokens[1][0] == '-' && !(tokens[1][1]))
+			new_dir = _getenv("OLDPWD");
+		else if (tokens[1][0] == '~' && !(tokens[1][1]))
+			new_dir = home_dir;
+		else
+		{
+			_strcat(_strcpy(slash, "/"), tokens[1]);
+			_strcat((strcpy(target_dir, current_dir)), slash);
+		}
+	} else if (tokens[1] == "cd")
+		new_dir = home_dir;
+	if (new_dir == home_dir)
+		chdir(home_dir);
+	else if (new_dir == _getenv("OLDPWD"))
+	{
+		chdir(_getenv("OLDPWD"));
+		printf("%s\n", _getenv("OLDPWD"));
+	} else if (access(target_dir, F_OK) == 0)
+	{
+		chdir(target_dir);
+	} else
+		perror("Directory does not exist");
+	setenv("OLDPWD", current_dir, 1);
+	setenv("PWD", getcwd(dir, 1024), 1);
+	free(home_dir);
+	free(dir);
+	free(target_dir);
+	free(slash);
+	return (1);
 }
