@@ -57,7 +57,7 @@ ssize_t exit_shell(char *t, char *t1, char *t2, char **args, char *fst)
 		}
 		i++;
 	}
-	status = atoi(args[1]);
+	status = _atoi(args[1]);
 	free_str(args);
 	exit(status);
 }
