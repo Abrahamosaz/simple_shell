@@ -33,7 +33,7 @@ struct path_env
 typedef struct built_in
 {
 	char *_command;
-	ssize_t (*ptr)();
+	ssize_t (*ptr)(char *, char *, char *, char **, char *);
 } built_in;
 
 /* function declarations */
@@ -51,7 +51,7 @@ struct path_env *set_path();
 ssize_t _execve_path(char **args, char *);
 char *search_path(char **args, char *argv);
 void free_list(struct path_env *head);
-ssize_t env_shell();
+ssize_t env_shell(char *, char *, char *, char **, char *);
 ssize_t _cd(char *, char *name, char *value, char **, char *);
 size_t args_count(char **args);
 void shorten(char *, char *, char *);

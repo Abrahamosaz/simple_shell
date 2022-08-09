@@ -69,10 +69,21 @@ ssize_t exit_shell(char *t, char *t1, char *t2, char **args, char *fst)
  *
  * Return: return integer value
  */
-ssize_t env_shell(void)
+ssize_t env_shell(char *tk, char *tk1, char *tk2, char **f, char *fst)
 {
 	unsigned int i = 0;
 
+	(void)fst;
+	(void)tk2;
+	if (!tk || f[1])
+	{
+		write(STDERR_FILENO, tk, _strlen(tk));
+		write(STDERR_FILENO, ": ", 2);
+		write(STDERR_FILENO, tk1, _strlen(tk1));
+		write(STDERR_FILENO, ": ", 2);
+		write(STDERR_FILENO, "no such file or directory\n", 26);
+		return (1);
+	}
 	while (environ[i])
 	{
 		print_str(environ[i]);

@@ -135,7 +135,7 @@ void shorten(char *token, char *value, char *fst)
 	else
 	{
 		_strcat(_strcpy(slash, "/"), value);
-		_strcat((strcpy(target_dir, current_dir)), slash);
+		_strcat((_strcpy(target_dir, current_dir)), slash);
 	}
 	if (new_dir == home_dir)
 		chdir(home_dir);
