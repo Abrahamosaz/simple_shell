@@ -39,7 +39,7 @@ ssize_t built_commands(char **argv, char *first_arg)
  */
 ssize_t exit_shell(char *t, char *t1, char *t2, char **args, char *fst)
 {
-	ssize_t i = 0, status;
+	int i = 0, status;
 
 	(void)t;
 	(void)t1;
@@ -60,7 +60,7 @@ ssize_t exit_shell(char *t, char *t1, char *t2, char **args, char *fst)
 		}
 		i++;
 	}
-	status = atoi(args[1]);
+	status = _atoi(args[1]);
 	free_str(args);
 	exit(status);
 }
@@ -95,7 +95,7 @@ ssize_t setenv_shell(char *tk, char *name, char *value, char **f, char *fst)
 	size_t i = 0, check = 0, x, j, h = 0;
 	char *buffer = NULL, *store = NULL;
 
-	if (!name || !value)
+	if (!name || !value || !f[0])
 	{
 		set_error(tk, fst);
 		return (1);
