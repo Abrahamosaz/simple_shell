@@ -66,6 +66,11 @@ ssize_t exit_shell(char *t, char *t1, char *t2, char **args, char *fst)
 }
 /**
  * env_shell - print out the environ variables
+ * @tk: first argument
+ * @tk1: second argument
+ * @tk2: third argument
+ * @f: array of pointers
+ * @fst: name of the executable file
  *
  * Return: return integer value
  */
@@ -96,7 +101,7 @@ ssize_t env_shell(char *tk, char *tk1, char *tk2, char **f, char *fst)
  * @tk: first argument
  * @name: name of the varaible
  * @value: value of the varaible
- * @f: arryays of pinters of the arguments
+ * @f: array of pinters of the arguments
  * @fst: name of the shell executable
  *
  * Return: return integer value 1
