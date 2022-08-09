@@ -123,8 +123,8 @@ void shorten(char *token, char *value, char *fst)
 	current_dir = _getenv("PWD");
 	home_dir = malloc(sizeof(char) * 100);
 	target_dir = malloc(sizeof(char) * 1024);
-	slash = malloc(sizeof(char) * (strlen(value) + 1));
-	strcat((_strcpy(home_dir, _getenv("HOME"))), "/");
+	slash = malloc(sizeof(char) * (_strlen(value) + 1));
+	_strcat((_strcpy(home_dir, _getenv("HOME"))), "/");
 
 	if ((value[0] == '-' && value[1] == '-') && !(value[2]))
 		new_dir = home_dir;
