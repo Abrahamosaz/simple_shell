@@ -55,7 +55,7 @@ struct path_env *set_path();
 ssize_t _execve_path(char **args, char *);
 char *search_path(char **args, char *argv);
 void free_list(struct path_env *head);
-ssize_t env_shell();
+ssize_t env_shell(void);
 ssize_t _cd(char *, char *name, char *value);
 void shorten(char *value);
 /* set enviroment varaible */

@@ -54,29 +54,29 @@ ssize_t _isalpha(char str)
  */
 int _atoi(char *str)
 {
-        int sign = 1, value = 0, i = 0, j = 0;
-        size_t size;
-        char *string = NULL;
+	int sign = 1, value = 0, i = 0, j = 0;
+	size_t size;
+	char *string = NULL;
 
-        size = strlen(str);
-        string = malloc(sizeof(char) * size);
-        while (*str)
-        {
-                string[i] = *str;
-                i++;
-                str++;
-        }
-        if (string[0] == '-')
-        {
-                sign = -1;
-                j = 1;
-        }
-        while (string[j] != '\0')
-        {
-                if ((string[j] - '0') < 0 || (string[j] - '0') > 9)
-                        return (0);
-                value = (value * 10) + (string[j] - '0');
-                j++;
-        }
-        return (sign * value);
+	size = strlen(str);
+	string = malloc(sizeof(char) * size);
+	while (*str)
+	{
+		string[i] = *str;
+		i++;
+		str++;
+	}
+	if (string[0] == '-')
+	{
+		sign = -1;
+		j = 1;
+	}
+	while (string[j] != '\0')
+	{
+		if ((string[j] - '0') < 0 || (string[j] - '0') > 9)
+			return (0);
+		value = (value * 10) + (string[j] - '0');
+		j++;
+	}
+	return (sign * value);
 }
