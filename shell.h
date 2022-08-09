@@ -57,6 +57,7 @@ char *search_path(char **args, char *argv);
 void free_list(struct path_env *head);
 ssize_t env_shell();
 ssize_t _cd(char *, char *name, char *value);
+void shorten(char *value);
 /* set enviroment varaible */
 ssize_t setenv_shell(char *, char *, char *);
 void _setenv(char *name, char *value, size_t *n, char *address);
