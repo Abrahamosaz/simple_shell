@@ -22,8 +22,10 @@ char *_strcat(char *dest, char *src)
 	return (dest);
 }
 /**
+ * print_str - print string to STDOUT
+ * @args: string
  *
- *
+ * Return: return void
  */
 void print_str(char *args)
 {
@@ -37,9 +39,10 @@ void print_str(char *args)
 	write(STDOUT_FILENO, "\n", 2);
 }
 /**
+ * _isalpha - check if a number is alphabetical
+ * @str: value to check
  *
- *
- *
+ * Return: return 0 if True and 1 othewise
  */
 ssize_t _isalpha(char str)
 {
@@ -58,7 +61,7 @@ int _atoi(char *str)
 	size_t size;
 	char *string = NULL;
 
-	size = strlen(str);
+	size = _strlen(str);
 	string = malloc(sizeof(char) * size);
 	while (*str)
 	{
@@ -78,5 +81,20 @@ int _atoi(char *str)
 		value = (value * 10) + (string[j] - '0');
 		j++;
 	}
+	free(string);
 	return (sign * value);
+}
+/**
+ * args_count - count the number of arguments enter by the user
+ * @args: array of pointers of arguments
+ *
+ * Return: return the count
+ */
+size_t args_count(char **args)
+{
+	size_t i = 0, count = 0;
+
+	while (args[i++])
+		count++;
+	return (count);
 }

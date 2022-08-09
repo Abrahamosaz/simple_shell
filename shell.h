@@ -10,10 +10,6 @@
 #include <string.h>
 #include "string.h"
 
-/* defined macro */
-#define READSIZE 1024
-#define PATH_SIZE 50
-
 /* struct for enviroment variable */
 /**
  * struct path_env - struct that store the path value
@@ -55,11 +51,13 @@ struct path_env *set_path();
 ssize_t _execve_path(char **args, char *);
 char *search_path(char **args, char *argv);
 void free_list(struct path_env *head);
-ssize_t env_shell(void);
-ssize_t _cd(char *, char *name, char *value);
-void shorten(char *value);
+ssize_t env_shell();
+ssize_t _cd(char *, char *name, char *value, char **, char *);
+size_t args_count(char **args);
+void shorten(char *, char *, char *);
 /* set enviroment varaible */
-ssize_t setenv_shell(char *, char *, char *);
+ssize_t setenv_shell(char *, char *, char *, char **, char *);
 void _setenv(char *name, char *value, size_t *n, char *address);
-ssize_t unsetenv_shell(char *name);
+ssize_t unsetenv_shell(char *, char *, char *, char **, char *first_args);
+void set_error(char *, char *);
 #endif

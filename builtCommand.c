@@ -1,9 +1,8 @@
 #include "shell.h"
-#define ERROR_MESSAGE                                      \
-	write(STDERR_FILENO, "couldn't set varaible\n", 23)
 /**
  * built_commands - for commands executed on the shell
  * @argv: arguments passed by the user
+ * @first_arg: name of the shell executable file
  *
  * Return: return integer value
  */
@@ -31,6 +30,10 @@ ssize_t built_commands(char **argv, char *first_arg)
 /**
  * exit_shell - To exit the current shell
  * @args: argument passed by the user
+ * @t: first argument
+ * @t1: second argument
+ * @t2: third argument
+ * @fst: name of the executable file
  *
  * Return: return integer value
  */
@@ -57,13 +60,14 @@ ssize_t exit_shell(char *t, char *t1, char *t2, char **args, char *fst)
 		}
 		i++;
 	}
-	status = _atoi(args[1]);
+	status = atoi(args[1]);
 	free_str(args);
 	exit(status);
 }
 /**
+ * env_shell - print out the environ variables
  *
- *
+ * Return: return integer value
  */
 ssize_t env_shell(void)
 {
@@ -77,18 +81,23 @@ ssize_t env_shell(void)
 	return (1);
 }
 /**
+ * setenv_shell - set new enviorn variable
+ * @tk: first argument
+ * @name: name of the varaible
+ * @value: value of the varaible
+ * @f: arryays of pinters of the arguments
+ * @fst: name of the shell executable
  *
- *
- *
+ * Return: return integer value 1
  */
-ssize_t setenv_shell(__attribute__((unused))char *tk, char *name, char *value)
+ssize_t setenv_shell(char *tk, char *name, char *value, char **f, char *fst)
 {
 	size_t i = 0, check = 0, x, j, h = 0;
 	char *buffer = NULL, *store = NULL;
 
 	if (!name || !value)
 	{
-		ERROR_MESSAGE;
+		set_error(tk, fst);
 		return (1);
 	}
 	buffer = malloc(sizeof(char) * _strlen(name) + _strlen(value) + 1);
@@ -125,8 +134,13 @@ ssize_t setenv_shell(__attribute__((unused))char *tk, char *name, char *value)
 	return (1);
 }
 /**
+ * _setenv - set environ variable of exiting varaibles
+ * @name: name of the variable
+ * @value: value of change to
+ * @n: check value
+ * @address: address of the variable
  *
- *
+ * Return: return void
  */
 void _setenv(char *name, char *value, size_t *n, char *address)
 {
