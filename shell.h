@@ -42,7 +42,7 @@ int execute_command(char **argv);
 char *getstring(char *string);
 ssize_t execute(char **lineptr, char **argv);
 void free_str(char **argv);
-char *_getenv(const char *env);
+char *_getenv(char *env);
 ssize_t built_commands(char **argv, char *);
 ssize_t exit_shell(char *, char *, char *, char **args, char *);
 ssize_t check_file(char *filepath);

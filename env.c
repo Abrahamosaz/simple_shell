@@ -5,14 +5,14 @@
  *
  * Return: return pointer
  */
-char *_getenv(const char *env)
+char *_getenv(char *env)
 {
 	size_t i = 0, j, k;
 
-	j = strlen(env);
+	j = _strlen(env);
 	while (environ[i])
 	{
-		if (strncmp(environ[i], env, j) == 0)
+		if (_strncmp(environ[i], env, j) == 0)
 		{
 			for (k = 0; environ[i][k]; k++)
 			{

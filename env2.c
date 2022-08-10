@@ -116,7 +116,7 @@ ssize_t _cd(char *tk, char *value, char *ext, char **f, char *fst)
  *
  * Return: void
  */
-void shorten(char *token, char *value, char *fst)
+void shorten(char *token, char *value, __attribute__((unused))char *fst)
 {
 	char *current_dir, *new_dir, *slash, *home_dir, *target_dir;
 
@@ -125,7 +125,6 @@ void shorten(char *token, char *value, char *fst)
 	target_dir = malloc(sizeof(char) * 1024);
 	slash = malloc(sizeof(char) * (_strlen(value) + 1));
 	_strcat((_strcpy(home_dir, _getenv("HOME"))), "/");
-
 	if ((value[0] == '-' && value[1] == '-') && !(value[2]))
 		new_dir = home_dir;
 	else if (value[0] == '-' && !(value[1]))
@@ -140,15 +139,17 @@ void shorten(char *token, char *value, char *fst)
 	if (new_dir == home_dir)
 		chdir(home_dir);
 	else if (new_dir == _getenv("OLDPWD"))
+	{
 		chdir(_getenv("OLDPWD"));
+		write(STDOUT_FILENO, new_dir, strlen(new_dir));
+		write(STDOUT_FILENO, "\n", 1);
+	}
 	else if (access(target_dir, F_OK) == 0)
 		chdir(target_dir);
 	else if (!value || _strncmp(value, "$HOME", 5) == 0)
 		chdir(home_dir);
 	else
 	{
-		write(STDERR_FILENO, fst, _strlen(fst));
-		write(STDERR_FILENO, ": ", 2);
 		write(STDERR_FILENO, token, _strlen(token));
 		write(STDERR_FILENO, ": can't cd to ", 14);
 		write(STDERR_FILENO, value, _strlen(value));
