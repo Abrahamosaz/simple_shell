@@ -60,7 +60,7 @@ char **strtoken(char *buffer)
 		return (NULL);
 	_strcpy(buffer_cpy, buffer);
 	count = _strword(buffer, delim);
-	string_tokenize = malloc(sizeof(char *) * count);
+	string_tokenize = malloc(sizeof(char *) * count + 1);
 	if (!string_tokenize)
 		return (NULL);
 	token = strtok(buffer_cpy, delim);
