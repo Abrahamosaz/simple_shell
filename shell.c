@@ -32,6 +32,7 @@ ssize_t execute(char **lineptr, char **argv)
 	if (childid == 0)
 		execve(new_path_env, lineptr, environ);
 	waitpid(childid, NULL, 0);
+	free(new_path_env);
 	return (1);
 }
 /**

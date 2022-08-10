@@ -55,18 +55,18 @@ char **strtoken(char *buffer)
 
 	while (buffer[i])
 		i++;
-	buffer_cpy = malloc(sizeof(char) * i);
+	buffer_cpy = malloc(sizeof(char) * i + 1);
 	if (!buffer_cpy)
 		return (NULL);
 	_strcpy(buffer_cpy, buffer);
 	count = _strword(buffer, delim);
-	string_tokenize = malloc(sizeof(char *) * count + 1);
+	string_tokenize = malloc(sizeof(char *) * count);
 	if (!string_tokenize)
 		return (NULL);
 	token = strtok(buffer_cpy, delim);
 	for (j = 0; token; j++)
 	{
-		string_tokenize[j] = malloc(sizeof(char) * _strlen(token));
+		string_tokenize[j] = malloc(sizeof(char) * _strlen(token) + 1);
 		_strcpy(string_tokenize[j], token);
 		token = strtok(NULL, delim);
 	}

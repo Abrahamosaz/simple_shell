@@ -10,7 +10,7 @@ char *search_path(char **args, char *argv)
 {
 	struct path_env *trans;
 	char slash[1] = "/", *path = NULL;
-	int len;
+	ssize_t len;
 
 	if (check_file(args[0]) == 0)
 		return ("find");
@@ -18,9 +18,12 @@ char *search_path(char **args, char *argv)
 	while (trans)
 	{
 		len = _strlen(trans->string) + 1 + _strlen(args[0]);
-		path = malloc(sizeof(char) * len);
+		path = malloc(sizeof(char) * len + 1);
 		if (!path)
+		{
+			free(path);
 			return (NULL);
+		}
 		_strcat(path, trans->string);
 		_strcat(path, slash);
 		_strcat(path, args[0]);

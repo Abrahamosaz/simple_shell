@@ -67,7 +67,7 @@ struct path_env *set_path()
 	char *token, *delim = ":";
 	struct path_env *path_var = NULL, *head = NULL;
 
-	path = malloc(sizeof(char) * _strlen(_getenv("PATH")));
+	path = malloc(sizeof(char) * _strlen(_getenv("PATH")) + 1);
 	if (!path)
 	{
 		free(path);
