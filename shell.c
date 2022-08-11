@@ -72,7 +72,7 @@ ssize_t  _execve_path(char **args, char *argv)
  *
  * Return: return an integer value
  */
-int main(int argc, char *argv[])
+int main(__attribute__((unused))int argc, char *argv[])
 {
 	ssize_t exit_status, output;
 	size_t input;
