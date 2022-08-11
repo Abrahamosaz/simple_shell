@@ -38,7 +38,6 @@ typedef struct built_in
 
 /* function declarations */
 extern char **environ;
-int execute_command(char **argv);
 char *getstring(char *string);
 ssize_t execute(char **lineptr, char **argv);
 void free_str(char **argv);
