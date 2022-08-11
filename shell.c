@@ -79,31 +79,20 @@ int main(int argc, char *argv[])
 	char *buffer = NULL, **tokens = NULL;
 
 	do {
-		if  (argc > 1)
-		{
-			if (check_file(argv[1]) == 0)
-				exit_status = execute_command(argv);
-			else
-			{
-				perror(argv[0]);
-				exit_status = -1;
-			}
-		} else
-		{
+		if (isatty(STDIN_FILENO) == 1)
 			write(STDOUT_FILENO, "#cisfun$ ", 9);
-			output = getline(&buffer, &input, stdin);
-			if (output == -1)
-			{
-				free(buffer);
-				exit(EXIT_SUCCESS);
-			}
-			tokens = strtoken(buffer);
-			exit_status = execute(tokens, argv);
-			free_str(tokens);
+		output = getline(&buffer, &input, stdin);
+		if (output == -1)
+		{
 			free(buffer);
-			tokens = NULL;
-			buffer = NULL;
+			exit(EXIT_SUCCESS);
 		}
+		tokens = strtoken(buffer);
+		exit_status = execute(tokens, argv);
+		free_str(tokens);
+		free(buffer);
+		tokens = NULL;
+		buffer = NULL;
 	} while (exit_status != -1);
 	exit(EXIT_SUCCESS);
 }
