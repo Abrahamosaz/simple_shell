@@ -10,6 +10,7 @@
 #include <string.h>
 #include "string.h"
 
+#define PATH_SIZE 200
 /* struct for enviroment variable */
 /**
  * struct path_env - struct that store the path value
@@ -19,8 +20,7 @@
  */
 struct path_env
 {
-	char *string;
-	unsigned int len;
+	char string[PATH_SIZE];
 	struct path_env *next;
 };
 

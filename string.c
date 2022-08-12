@@ -60,7 +60,7 @@ char **strtoken(char *buffer)
 		return (NULL);
 	_strcpy(buffer_cpy, buffer);
 	count = _strword(buffer, delim);
-	string_tokenize = malloc(sizeof(char *) * count + 1);
+	string_tokenize = malloc(sizeof(char *) * count);
 	if (!string_tokenize)
 		return (NULL);
 	token = strtok(buffer_cpy, delim);
@@ -92,7 +92,7 @@ int _strword(char *str, char *delim)
 		count++;
 		token = strtok(NULL, delim);
 	}
-	return (count);
+	return (count + 1);
 }
 /**
  * _strcpy - copy the string from src to dest

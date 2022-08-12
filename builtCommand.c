@@ -116,12 +116,6 @@ ssize_t setenv_shell(char *tk, char *name, char *value, char **f, char *fst)
 		set_error(tk, fst);
 		return (1);
 	}
-	buffer = malloc(sizeof(char) * _strlen(name) + _strlen(value) + 1);
-	if (buffer == NULL)
-	{
-		free(buffer);
-		return (1);
-	}
 	while (environ[i])
 	{
 		if (_strncmp(environ[i], name, _strlen(name)) == 0)
@@ -135,6 +129,12 @@ ssize_t setenv_shell(char *tk, char *name, char *value, char **f, char *fst)
 	if (check)
 	{
 		_setenv(name, value, &check, store);
+		return (1);
+	}
+	buffer = malloc(sizeof(char) * _strlen(name) + _strlen(value) + 1);
+	if (buffer == NULL)
+	{
+		free(buffer);
 		return (1);
 	}
 	for (j = 0; j < _strlen(name); j++)

@@ -43,8 +43,7 @@ struct path_env *add_node_end(struct path_env **head, char *environ)
 		free(new_node);
 		return (NULL);
 	}
-	new_node->string = environ;
-	new_node->len = _strlen(environ);
+	_strcpy(new_node->string, environ);
 	new_node->next = NULL;
 	if (!*head)
 	{
@@ -65,8 +64,11 @@ struct path_env *set_path()
 {
 	char *path, *find;
 	char *token, *delim = ":";
-	struct path_env *path_var = NULL, *head = NULL;
+	struct path_env *head = NULL;
 
+	head = malloc(sizeof(head));
+	if (!head)
+		return (NULL);
 	path = malloc(sizeof(char) * _strlen(_getenv("PATH")) + 1);
 	if (!path)
 	{
@@ -76,9 +78,12 @@ struct path_env *set_path()
 	find = _getenv("PATH");
 	_strcpy(path, find);
 	token = strtok(path, delim);
+	_strcpy(head->string, token);
+	head->next = NULL;
+	token = strtok(NULL, delim);
 	while (token)
 	{
-		head = add_node_end(&path_var, token);
+		add_node_end(&head, token);
 		token = strtok(NULL, delim);
 	}
 	free(path);

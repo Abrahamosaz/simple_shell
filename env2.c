@@ -8,13 +8,14 @@
  */
 char *search_path(char **args, char *argv)
 {
-	struct path_env *trans;
+	struct path_env *trans, *head = NULL;
 	char slash[1] = "/", *path = NULL;
 	ssize_t len;
 
 	if (check_file(args[0]) == 0)
 		return ("find");
 	trans = set_path();
+	head = trans;
 	while (trans)
 	{
 		len = _strlen(trans->string) + 1 + _strlen(args[0]);
@@ -29,14 +30,14 @@ char *search_path(char **args, char *argv)
 		_strcat(path, args[0]);
 		if (check_file(path) == 0)
 		{
-			free_list(trans);
+			free_list(head);
 			return (path);
 		}
 		free(path);
 		path = NULL;
 		trans = trans->next;
 	}
-	free_list(trans);
+	free_list(head);
 	perror(argv);
 	return (NULL);
 }
