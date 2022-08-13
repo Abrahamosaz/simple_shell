@@ -20,10 +20,9 @@
  */
 struct path_env
 {
-	char string[PATH_SIZE];
+	char *string;
 	struct path_env *next;
 };
-
 /* buitin commands */
 /**
  * struct built_in - struct for builtin commands in the shell

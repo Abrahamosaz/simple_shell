@@ -19,13 +19,13 @@ char *search_path(char **args, char *argv)
 	while (trans)
 	{
 		len = _strlen(trans->string) + 1 + _strlen(args[0]);
-		path = malloc(sizeof(char) * len + 1);
+		path = malloc(sizeof(char) * (len + 1));
 		if (!path)
 		{
 			free(path);
 			return (NULL);
 		}
-		_strcat(path, trans->string);
+		_strcpy(path, trans->string);
 		_strcat(path, slash);
 		_strcat(path, args[0]);
 		if (check_file(path) == 0)

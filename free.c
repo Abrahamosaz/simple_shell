@@ -30,6 +30,7 @@ void free_list(struct path_env *head)
 	while (dir)
 	{
 		dir = dir->next;
+		free(head->string);
 		free(head);
 		head = dir;
 	}

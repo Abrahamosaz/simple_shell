@@ -62,19 +62,20 @@ int _atoi(char *str)
 	char *string = NULL;
 
 	size = _strlen(str);
-	string = malloc(sizeof(char) * size);
+	string = malloc(sizeof(char) * (size + 1));
 	while (*str)
 	{
 		string[i] = *str;
 		i++;
 		str++;
 	}
+	string[i] = '\0';
 	if (string[0] == '-')
 	{
 		sign = -1;
 		j = 1;
 	}
-	while (string[j] != '\0')
+	while (string[j])
 	{
 		if ((string[j] - '0') < 0 || (string[j] - '0') > 9)
 			return (0);
