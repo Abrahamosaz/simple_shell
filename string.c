@@ -72,6 +72,7 @@ char **strtoken(char *buffer)
 	}
 	string_tokenize[j] = NULL;
 	free(buffer_cpy);
+	free(buffer);
 	return (string_tokenize);
 }
 /**

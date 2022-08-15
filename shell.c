@@ -90,7 +90,6 @@ int main(__attribute__((unused))int argc, char *argv[])
 		tokens = strtoken(buffer);
 		exit_status = execute(tokens, argv);
 		free_str(tokens);
-		free(buffer);
 		tokens = NULL;
 		buffer = NULL;
 	} while (exit_status != -1);

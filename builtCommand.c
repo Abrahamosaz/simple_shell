@@ -22,7 +22,7 @@ ssize_t built_commands(char **argv, char *first_arg)
 	while (var[i]._command)
 	{
 		if (_strncmp(var[i]._command, argv[0], 0) == 0)
-			exit_status = var[i].ptr(argv[0], argv[1], argv[2], argv, first_arg);
+			exit_status = var[i].ptr(argv, first_arg);
 		i++;
 	}
 	return (exit_status);
@@ -30,20 +30,14 @@ ssize_t built_commands(char **argv, char *first_arg)
 /**
  * exit_shell - To exit the current shell
  * @args: argument passed by the user
- * @t: first argument
- * @t1: second argument
- * @t2: third argument
  * @fst: name of the executable file
  *
  * Return: return integer value
  */
-ssize_t exit_shell(char *t, char *t1, char *t2, char **args, char *fst)
+ssize_t exit_shell(char **args, char *fst)
 {
 	int i = 0, status;
 
-	(void)t;
-	(void)t1;
-	(void)t2;
 	if (!args[1])
 		return (-1);
 	while (args[1][i])
@@ -66,25 +60,21 @@ ssize_t exit_shell(char *t, char *t1, char *t2, char **args, char *fst)
 }
 /**
  * env_shell - print out the environ variables
- * @tk: first argument
- * @tk1: second argument
- * @tk2: third argument
  * @f: array of pointers
  * @fst: name of the executable file
  *
  * Return: return integer value
  */
-ssize_t env_shell(char *tk, char *tk1, char *tk2, char **f, char *fst)
+ssize_t env_shell(char **f, char *fst)
 {
 	unsigned int i = 0;
 
 	(void)fst;
-	(void)tk2;
-	if (!tk || f[1])
+	if (!f[0] || f[1])
 	{
-		write(STDERR_FILENO, tk, _strlen(tk));
+		write(STDERR_FILENO, f[0], _strlen(f[0]));
 		write(STDERR_FILENO, ": ", 2);
-		write(STDERR_FILENO, tk1, _strlen(tk1));
+		write(STDERR_FILENO, f[1], _strlen(f[1]));
 		write(STDERR_FILENO, ": ", 2);
 		write(STDERR_FILENO, "no such file or directory\n", 26);
 		return (1);
@@ -97,28 +87,25 @@ ssize_t env_shell(char *tk, char *tk1, char *tk2, char **f, char *fst)
 	return (1);
 }
 /**
- * setenv_shell - set new enviorn variable
- * @tk: first argument
- * @name: name of the varaible
- * @value: value of the varaible
+ * setenv_shell - set new environ variable
  * @f: array of pinters of the arguments
  * @fst: name of the shell executable
  *
  * Return: return integer value 1
  */
-ssize_t setenv_shell(char *tk, char *name, char *value, char **f, char *fst)
+ssize_t setenv_shell(char **f, char *fst)
 {
 	size_t i = 0, check = 0, x, j, h = 0;
 	char *buffer = NULL, *store = NULL;
 
-	if (!name || !value || !f[0])
+	if (!f[1] || !f[2] || !f[0])
 	{
-		set_error(tk, fst);
+		set_error(f[0], fst);
 		return (1);
 	}
 	while (environ[i])
 	{
-		if (_strncmp(environ[i], name, _strlen(name)) == 0)
+		if (_strncmp(environ[i], f[1], _strlen(f[1])) == 0)
 		{
 			check = 1;
 			store = environ[i];
@@ -128,20 +115,20 @@ ssize_t setenv_shell(char *tk, char *name, char *value, char **f, char *fst)
 	}
 	if (check)
 	{
-		_setenv(name, value, &check, store);
+		_setenv(f[1], f[2], &check, store);
 		return (1);
 	}
-	buffer = malloc(sizeof(char) * _strlen(name) + _strlen(value) + 1);
+	buffer = malloc(sizeof(char) * _strlen(f[1]) + _strlen(f[2]) + 1);
 	if (buffer == NULL)
 	{
 		free(buffer);
 		return (1);
 	}
-	for (j = 0; j < _strlen(name); j++)
-		buffer[j] = name[j];
+	for (j = 0; j < _strlen(f[1]); j++)
+		buffer[j] = f[1][j];
 	buffer[j] = '=';
-	for (x = 0, j += 1; x < _strlen(value); x++, j++)
-		buffer[j] = value[x];
+	for (x = 0, j += 1; x < _strlen(f[2]); x++, j++)
+		buffer[j] = f[2][x];
 	buffer[j] = '\0';
 	while (environ[h])
 		h++;
